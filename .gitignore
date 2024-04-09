@@ -1,0 +1,5 @@
+# asdf versioning
+.tool-versions
+
+# python virtual environment
+venv
