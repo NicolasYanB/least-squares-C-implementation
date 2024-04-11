@@ -6,6 +6,7 @@ venv
 
 # C build
 build
+*.o
 
 #vscode directory
 .vscode

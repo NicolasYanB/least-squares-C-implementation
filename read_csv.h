@@ -10,7 +10,9 @@
 typedef struct {
   double** model_matrix;
   double* observations;
-} RegressionInfo;
+  int observation_count;
+  int parameter_count;
+} RegressionData;
 
 static int count_lines(FILE* f) {
   int count = 0;
@@ -87,7 +89,7 @@ double* get_observations(char** raw_content, int line_count, int parameter_count
   return observations;
 }
 
-RegressionInfo read_csv(char* path) {
+RegressionData read_csv(char* path) {
   FILE* fp;
   fp = fopen(path, "r");
   int lines = count_lines(fp);
@@ -95,10 +97,12 @@ RegressionInfo read_csv(char* path) {
   int parameters = count_parameters(content[0]);
   double** model_matrix = get_matrix(content, lines, parameters);
   double* observations = get_observations(content, lines, parameters);
-  RegressionInfo ri;
-  ri.model_matrix = model_matrix;
-  ri.observations = observations;
-  return ri;
+  RegressionData rd;
+  rd.model_matrix = model_matrix;
+  rd.observations = observations;
+  rd.observation_count = lines - 2;
+  rd.parameter_count = parameters + 1;
+  return rd;
 }
 
 #endif
