@@ -3,3 +3,9 @@
 
 # python virtual environment
 venv
+
+# C build
+build
+
+#vscode directory
+.vscode
