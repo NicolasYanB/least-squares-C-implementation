@@ -1,0 +1,1 @@
+gcc read_csv.h main.c -o build/main
