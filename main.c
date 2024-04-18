@@ -28,6 +28,46 @@ double** multiply(double** matrix1, int lines1, int columns1, double** matrix2, 
   return result;
 }
 
+double** get_indentity(int size) {
+  double** identity = (double**)malloc(sizeof(double*) * size);
+  for (int i=0; i<size; i++){
+    identity[i] = (double*)malloc(sizeof(double) * size);
+  }
+
+  for (int i=0; i<size; i++){
+    for (int j=0; j<size; j++) {
+      if (i == j) {
+        identity[i][j] = 1;
+        continue;
+      }
+      identity[i][j] = 0;
+    }
+  }
+
+  return identity;
+}
+
+double** inverse(double** matrix, int size) {
+  double** identity = get_indentity(size);
+  double value;
+  for (int k=0; k<size; k++){
+    value = matrix[k][k];
+    for (int j=0; j<size; j++){
+      matrix[k][j] /= value;
+      identity[k][j] /= value;
+    }
+    for (int i=0; i<size; i++) {
+      value = matrix[i][k];
+      for (int j=0; j<size; j++) {
+        if (i==k) break;
+        matrix[i][j] -= matrix[k][j]*value;
+        identity[i][j] -= identity[k][j]*value;
+      }
+    }
+  }
+  return identity;
+}
+
 int main() {
   RegressionData data = read_csv("data/diabetes_train.csv");
   double** model_matrix = data.model_matrix;
@@ -36,6 +76,7 @@ int main() {
   int y = data.observation_count;
   double** model_matrix_T = transpose(model_matrix, y, p);
   double** model_matrix_squared = multiply(model_matrix_T, p, y, model_matrix, y, p);
+  double** inversed_model_matrix_squared = inverse(model_matrix_squared, p);
   return 0;
 }
 
