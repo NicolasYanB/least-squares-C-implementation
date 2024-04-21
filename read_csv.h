@@ -102,6 +102,9 @@ RegressionData read_csv(char* path) {
   rd.observations = observations;
   rd.observation_count = lines - 2;
   rd.parameter_count = parameters + 1;
+
+  free(content);
+  
   return rd;
 }
 
