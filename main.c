@@ -77,6 +77,10 @@ int main() {
   double** model_matrix_T = transpose(model_matrix, y, p);
   double** model_matrix_squared = multiply(model_matrix_T, p, y, model_matrix, y, p);
   double** inversed_model_matrix_squared = inverse(model_matrix_squared, p);
+  double** final_model_matrix = multiply(inversed_model_matrix_squared, p, p, model_matrix_T, p, y);
+  double** observations_matrix = malloc(sizeof(double*));
+  observations_matrix[0] = observations;
+  double** model_parameters = multiply(final_model_matrix, p, y, transpose(observations_matrix, 1, y), y, 1);
   return 0;
 }
 
