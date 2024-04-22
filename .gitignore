@@ -10,3 +10,6 @@ build
 
 #vscode directory
 .vscode
+
+# output file
+results.txt

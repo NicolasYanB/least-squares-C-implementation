@@ -27,9 +27,37 @@ double** calculate_least_squares(RegressionData data) {
   return model_parameters;
 }
 
+char* serialize_parameters(double** parameters, int parameter_count) {
+  int precision = 10;
+  int size = (precision * parameter_count) + parameter_count;
+  char num[precision];
+  char* string = malloc(sizeof(char) * size);
+  for (int i=0; i<parameter_count;i++) {
+    snprintf(num, precision, "%.10f", parameters[i][0]);
+    if (i == 0) {
+      strcpy(string, num);
+    } else {
+      strcat(string, num);
+    }
+    strcat(string, "\n");
+  }
+
+  return string;
+}
+
+void save_to_file(char* serialized_values, char* filename) {
+  FILE* fptr;
+  fptr = fopen(filename, "w");
+  fprintf(fptr, "%s", serialized_values);
+  fclose(fptr);
+}
+
 int main() {
   RegressionData data = read_csv("data/diabetes_train.csv");
   double** model_parameters = calculate_least_squares(data);
+  char* serialized_model = serialize_parameters(model_parameters, data.parameter_count);
+  printf("%s\n", serialized_model);
+  save_to_file(serialized_model, "results.txt");
   return 0;
 }
 
